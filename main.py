@@ -34,5 +34,14 @@ async def go(ctx):
             await ctx.send("Failed to upload an image of the pokémon.")
     else:
         await ctx.send("You've already created your own Pokémon.")  # A message that is printed whether a Pokémon has already been created
+@bot.command()
+async def abilities(ctx):
+    author = ctx.author.name  # Getting the name of the message's author
+    if author in Pokemon.pokemons.keys():
+        pokemon = Pokemon.pokemons[author]  # Creating a new Pokémon
+        await ctx.send(await pokemon.show_ability())
+    else:
+        await ctx.send("Failed to find the ability of the pokémon.")
+
 # Running the bot
 bot.run(token)

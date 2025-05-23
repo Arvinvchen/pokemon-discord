@@ -32,3 +32,28 @@ class Pokemon:
 
     async def show_img(self):
         # An asynchronous method to retrieve the URL of a pokémon image via PokeAPI
+    
+        url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'  # URL API for the request
+        async with aiohttp.ClientSession() as session:  # Opening an HTTP session
+            async with session.get(url) as response:  # Sending a GET request
+                if response.status == 200:
+                    data = await response.json()  # Receiving and decoding JSON response
+                    return data['sprites']['versions']['generation-ii']['crystal']['front_transparent']  # Returning a Pokémon's name
+                else:
+                    return "image not found"  # Return the default name if the request fails
+
+
+    async def show_ability(self):
+        # An asynchronous method to retrieve the URL of a pokémon image via PokeAPI
+    
+        url = f'https://pokeapi.co/api/v2/pokemon/{self.pokemon_number}'  # URL API for the request
+        async with aiohttp.ClientSession() as session:  # Opening an HTTP session
+            async with session.get(url) as response:  # Sending a GET request
+                if response.status == 200:
+                    data = await response.json()  # Receiving and decoding JSON response
+                    return data['abilities'][0]['ability']['name'] # Returning a Pokémon's name
+                else:
+                    return "ability not found"  # Return the default name if the request fails
+
+
+
