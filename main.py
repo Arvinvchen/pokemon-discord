@@ -41,6 +41,20 @@ async def go(ctx):
         await ctx.send("Kamu berhasil mendapatkan Pokémon!")  # Menginformasikan kepada pengguna bahwa Pokémon telah dibuat
 
 @bot.command()
+async def info(ctx):
+    author = ctx.author.name  # Dapatkan nama pengguna yang menggunakan perintah
+    if author in Pokemon.pokemons:  # Periksa apakah pengguna ini memiliki Pokémon 
+        pokemon = Pokemon.pokemons[author]
+        await ctx.send(await pokemon.info())  # Mengirim informasi tentang Pokémon 
+        image_url = await pokemon.show_img()  # Mendapatkan URL gambar Pokémon
+        if image_url:
+            embed = discord.Embed()  # Membuat pesan yang disematkan (embed)
+            embed.set_image(url=image_url)  # Menyematkan gambar ke dalam pesan
+            await ctx.send(embed=embed)  # Mengirim sematan dengan gambar
+        else:
+            await ctx.send("Gagal menampilkan gambar Pokémon.")  # Melaporkan kesalahan jika kami tidak dapat memuat gambar Pokémon 
+
+@bot.command()
 async def attack(ctx):
     target = ctx.message.mentions[0] if ctx.message.mentions else None  # Mendapatkan pengguna yang disebutkan dalam pesan
     if target:  # Memeriksa apakah ada pengguna yang disebutkan

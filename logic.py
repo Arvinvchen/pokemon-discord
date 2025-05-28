@@ -1,11 +1,13 @@
 import aiohttp  # A library for asynchronous HTTP requests
 import random
 import asyncio
+from datetime import datetime, deltatime
 
 class Pokemon:
     pokemons = {}
     # Object initialisation (constructor)
     def __init__(self, pokemon_trainer):
+        self.last_feed_time = datetime.now()
         self.pokemon_trainer = pokemon_trainer
         self.pokemon_number = random.randint(1, 1000)
         self.name = None
@@ -71,6 +73,15 @@ class Pokemon:
             enemy.hp = 0
             return f"@{self.pokemon_trainer} menang melawan @{enemy.pokemon_trainer}!"
 
+    async def feed(self, feed_interval = 20, hp_increase = 10 ):
+        current_time = datetime.now()  
+        delta_time = datetime(hours=feed_interval)  
+        if (current_time - self.last_feed_time) > delta_time:
+            self.hp += hp_increase
+            self.last_feed_time = current_time
+            return f"Kesehatan Pokemon dipulihkan. HP saat ini: {self.hp}"
+        else:
+            return f"Kalian dapat memberi makan Pokémon kalian di: {current_time+delta_time}"  
 
 class Wizard(Pokemon):
     async def attack(self, enemy):
@@ -80,7 +91,15 @@ class Wizard(Pokemon):
         if not self.name:
             self.name = await self.get_name()  # Retrieving a name if it has not yet been uploaded
         return f"Wizard pokemon: {self.name} {self.hp} untuk darah {self.power} untuk atack"  # Returning the string with the Pokémon's name
-
+    async def feed(self, feed_interval = 10, hp_increase = 10 ):
+        current_time = datetime.now()  
+        delta_time = datetime(hours=feed_interval)  
+        if (current_time - self.last_feed_time) > delta_time:
+            self.hp += hp_increase
+            self.last_feed_time = current_time
+            return f"Kesehatan Pokemon dipulihkan. HP saat ini: {self.hp}"
+        else:
+            return f"Kalian dapat memberi makan Pokémon kalian di: {current_time+delta_time}"  
 
 class Fighter(Pokemon):
     async def attack(self, enemy):
@@ -94,7 +113,15 @@ class Fighter(Pokemon):
         if not self.name:
             self.name = await self.get_name()  # Retrieving a name if it has not yet been uploaded
         return f"fighter pokemon: {self.name} {self.hp} untuk darah {self.power} untuk atack"  # Returning the string with the Pokémon's name
-
+    async def feed(self, feed_interval = 20, hp_increase = 35 ):
+        current_time = datetime.now()  
+        delta_time = datetime(hours=feed_interval)  
+        if (current_time - self.last_feed_time) > delta_time:
+            self.hp += hp_increase
+            self.last_feed_time = current_time
+            return f"Kesehatan Pokemon dipulihkan. HP saat ini: {self.hp}"
+        else:
+            return f"Kalian dapat memberi makan Pokémon kalian di: {current_time+delta_time}"  
 
 async def main():
     wizard = Wizard("username1")
